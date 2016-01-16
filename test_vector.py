@@ -25,3 +25,15 @@ class TestVector(TestCase):
     def test_magnitude(self):
         self.assertEquals(Vector([-0.221, 7.437]).magnitude(), 7.440282924728065)
         self.assertEquals(Vector([8.813, -1.331, -6.247]).magnitude(), 10.884187567292289)
+
+    def test_normalization(self):
+        normalized = Vector([5.581, -2.136]).normalized()
+        self.assertEquals(normalized, Vector([0.9339352140866403, -0.35744232526233]))
+        self.assertEquals(round(normalized.magnitude(), 1), 1)
+
+        normalized = Vector([1.996, 3.108, -4.554]).normalized()
+        self.assertEquals(normalized, Vector([0.3404012959433014, 0.5300437012984873, -0.7766470449528029]))
+        self.assertEquals(round(normalized.magnitude(), 1), 1)
+
+    def test_normalization_with_0_vector(self):
+        self.assertRaises(Exception, Vector([0, 0]).normalized)
