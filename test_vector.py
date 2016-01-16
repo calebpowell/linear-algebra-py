@@ -37,3 +37,18 @@ class TestVector(TestCase):
 
     def test_normalization_with_0_vector(self):
         self.assertRaises(Exception, Vector([0, 0]).normalized)
+
+    def test_dot_product(self):
+        v1 = Vector([7.887, 4.138])
+        v2 = Vector([-8.802, 6.776])
+
+        self.assertEqual(v1.dot_product(v2), -41.382286)
+        self.assertEqual(v2.dot_product(v1), -41.382286)
+
+        v1 = Vector([-5.955, -4.904, -1.874])
+        v2 = Vector([-4.496, -8.755, 7.103])
+
+        self.assertEqual(round(v1.dot_product(v2), 6), 56.397178)
+        self.assertEqual(round(v2.dot_product(v1), 6), 56.397178)
+
+

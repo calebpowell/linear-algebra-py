@@ -44,3 +44,7 @@ class Vector(object):
             return self.times_scalar(1/self.magnitude())
         except ZeroDivisionError:
             raise Exception('Cannot normalize the 0 vector')
+
+    def dot_product(self, vector):
+        new_coordinates = [x*y for x,y in zip(self.coordinates, vector.coordinates)]
+        return sum(new_coordinates)
