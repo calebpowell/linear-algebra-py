@@ -21,3 +21,7 @@ class TestVector(TestCase):
     def test_scalar_multiplication_by_scalar(self):
         v = Vector([1.671, -1.012, -0.318])
         self.assertEqual(v.times_scalar(7.41), Vector([12.38211, -7.49892, -2.35638]))
+
+    def test_magnitude(self):
+        self.assertEquals(Vector([-0.221, 7.437]).magnitude(), 7.440282924728065)
+        self.assertEquals(Vector([8.813, -1.331, -6.247]).magnitude(), 10.884187567292289)

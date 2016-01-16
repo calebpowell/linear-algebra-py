@@ -1,4 +1,5 @@
 import operator
+import math
 __author__ = 'caleb'
 
 
@@ -33,3 +34,7 @@ class Vector(object):
     def times_scalar(self, c):
         new_coordinates = [c * x for x in self.coordinates]
         return Vector(new_coordinates)
+
+    def magnitude(self):
+        x = sum([pow(x, 2) for x in self.coordinates])
+        return math.sqrt(x)
