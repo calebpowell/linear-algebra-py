@@ -48,3 +48,11 @@ class Vector(object):
     def dot_product(self, vector):
         new_coordinates = [x*y for x,y in zip(self.coordinates, vector.coordinates)]
         return sum(new_coordinates)
+
+    def angle(self, vector):
+        numerator = self.dot_product(vector)
+        denominator = self.magnitude() * vector.magnitude()
+        return math.acos((numerator/denominator))
+
+    def angle_degrees(self, vector):
+        return math.degrees(self.angle(vector))

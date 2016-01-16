@@ -51,4 +51,21 @@ class TestVector(TestCase):
         self.assertEqual(round(v1.dot_product(v2), 6), 56.397178)
         self.assertEqual(round(v2.dot_product(v1), 6), 56.397178)
 
+    def test_angle_in_radians(self):
+        v1 = Vector([3.183, -7.627])
+        v2 = Vector([-2.668, 5.319])
 
+        self.assertEqual(round(v1.angle(v2), 5), 3.07203)
+        self.assertEqual(round(v2.angle(v1), 5), 3.07203)
+
+    def test_angle_in_degrees(self):
+        v1 = Vector([3.183, -7.627])
+        v2 = Vector([-2.668, 5.319])
+
+        self.assertEqual(round(v1.angle_degrees(v2), 2), 176.01)
+
+        v1 = Vector([7.35, 0.221, 5.188])
+        v2 = Vector([2.751, 8.259, 3.985])
+
+        self.assertEqual(round(v1.angle_degrees(v2), 3), 60.276)
+        self.assertEqual(round(v2.angle_degrees(v1), 3), 60.276)
