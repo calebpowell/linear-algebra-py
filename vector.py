@@ -47,12 +47,12 @@ class Vector(object):
         except ZeroDivisionError:
             raise Exception('Cannot normalize the 0 vector')
 
-    def dot_product(self, vector):
+    def dot(self, vector):
         new_coordinates = [x*y for x,y in zip(self.coordinates, vector.coordinates)]
         return sum(new_coordinates)
 
     def angle(self, vector):
-        numerator = self.dot_product(vector)
+        numerator = self.dot(vector)
         denominator = self.magnitude() * vector.magnitude()
         return math.acos((numerator/denominator))
 

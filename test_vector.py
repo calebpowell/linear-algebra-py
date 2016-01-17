@@ -46,14 +46,14 @@ class TestVector(TestCase):
         v1 = Vector([7.887, 4.138])
         v2 = Vector([-8.802, 6.776])
 
-        self.assertEqual(round(v1.dot_product(v2), 6), -41.382286)
-        self.assertEqual(round(v2.dot_product(v1), 6), -41.382286)
+        self.assertEqual(round(v1.dot(v2), 6), -41.382286)
+        self.assertEqual(round(v2.dot(v1), 6), -41.382286)
 
         v1 = Vector([-5.955, -4.904, -1.874])
         v2 = Vector([-4.496, -8.755, 7.103])
 
-        self.assertEqual(round(v1.dot_product(v2), 6), 56.397178)
-        self.assertEqual(round(v2.dot_product(v1), 6), 56.397178)
+        self.assertEqual(round(v1.dot(v2), 6), 56.397178)
+        self.assertEqual(round(v2.dot(v1), 6), 56.397178)
 
     def test_angle_in_radians(self):
         v1 = Vector([3.183, -7.627])
