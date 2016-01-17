@@ -9,18 +9,20 @@ class TestVector(TestCase):
         v1 = Vector([8.218, -9.341])
         v2 = Vector([-1.129, 2.111])
 
-        self.assertEqual(v1.plus(v2), Vector([7.089, -7.229999999999999]))
-        self.assertEqual(v2.plus(v1), Vector([7.089, -7.229999999999999]))
+        self.assertEqual(v1.plus(v2), Vector(['7.08899999999999996802557689080', '-7.22999999999999909405801190587']))
+        self.assertEqual(v2.plus(v1), Vector(['7.08899999999999996802557689080', '-7.22999999999999909405801190587']))
 
     def test_subtract(self):
         v1 = Vector([7.119, 8.215])
         v2 = Vector([-8.223, 0.878])
 
-        self.assertEqual(v1.minus(v2), Vector([15.342, 7.337]))
+        self.assertEqual(v1.minus(v2), Vector(['15.3420000000000005258016244625', '7.33699999999999985522691758888']))
 
     def test_scalar_multiplication_by_scalar(self):
         v = Vector([1.671, -1.012, -0.318])
-        self.assertEqual(v.times_scalar(7.41), Vector([12.38211, -7.49892, -2.35638]))
+        self.assertEqual(v.times_scalar(7.41),
+                         Vector(['12.3821100000000005402078784300', '-7.49892000000000022279067479758',
+                                 '-2.35638000000000008138822948922']), v.times_scalar(7.41))
 
     def test_magnitude(self):
         self.assertEquals(Vector([-0.221, 7.437]).magnitude(), 7.440282924728065)
@@ -28,11 +30,13 @@ class TestVector(TestCase):
 
     def test_normalization(self):
         normalized = Vector([5.581, -2.136]).normalized()
-        self.assertEquals(normalized, Vector([0.9339352140866403, -0.35744232526233]))
+        self.assertEquals(normalized, Vector(['0.933935214086640295130539147343', '-0.357442325262329983594964055642']),
+                          normalized)
         self.assertEquals(round(normalized.magnitude(), 1), 1)
 
         normalized = Vector([1.996, 3.108, -4.554]).normalized()
-        self.assertEquals(normalized, Vector([0.3404012959433014, 0.5300437012984873, -0.7766470449528029]))
+        self.assertEquals(normalized, Vector(['0.340401295943301353537171045562', '0.530043701298487295255023200306',
+                                              '-0.776647044952802835008995686630']), normalized)
         self.assertEquals(round(normalized.magnitude(), 1), 1)
 
     def test_normalization_with_0_vector(self):
@@ -42,8 +46,8 @@ class TestVector(TestCase):
         v1 = Vector([7.887, 4.138])
         v2 = Vector([-8.802, 6.776])
 
-        self.assertEqual(v1.dot_product(v2), -41.382286)
-        self.assertEqual(v2.dot_product(v1), -41.382286)
+        self.assertEqual(round(v1.dot_product(v2), 6), -41.382286)
+        self.assertEqual(round(v2.dot_product(v1), 6), -41.382286)
 
         v1 = Vector([-5.955, -4.904, -1.874])
         v2 = Vector([-4.496, -8.755, 7.103])

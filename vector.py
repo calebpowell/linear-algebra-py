@@ -1,14 +1,16 @@
 import operator
 import math
+from decimal import Decimal, getcontext
 __author__ = 'caleb'
 
+getcontext().prec = 30
 
 class Vector(object):
     def __init__(self, coordinates):
         try:
             if not coordinates:
                 raise ValueError
-            self.coordinates = tuple(coordinates)
+            self.coordinates = tuple([Decimal(x) for x in coordinates])
             self.dimension = len(coordinates)
 
         except ValueError:
@@ -32,16 +34,16 @@ class Vector(object):
         return Vector(new_coordinates)
 
     def times_scalar(self, c):
-        new_coordinates = [c * x for x in self.coordinates]
+        new_coordinates = [Decimal(c) * x for x in self.coordinates]
         return Vector(new_coordinates)
 
     def magnitude(self):
-        coordinates_squared = [x**2 for x in self.coordinates]
-        return math.sqrt(sum(coordinates_squared))
+        coordinates_squared = [Decimal(x)**Decimal(2) for x in self.coordinates]
+        return Decimal(math.sqrt(sum(coordinates_squared)))
 
     def normalized(self):
         try:
-            return self.times_scalar(1/self.magnitude())
+            return self.times_scalar(Decimal('1.0')/Decimal(self.magnitude()))
         except ZeroDivisionError:
             raise Exception('Cannot normalize the 0 vector')
 
