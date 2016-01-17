@@ -38,8 +38,8 @@ class Vector(object):
         return Vector(new_coordinates)
 
     def magnitude(self):
-        coordinates_squared = [Decimal(x)**Decimal(2) for x in self.coordinates]
-        return Decimal(math.sqrt(sum(coordinates_squared)))
+        coordinates_squared = [x**Decimal(2) for x in self.coordinates]
+        return sum(coordinates_squared).sqrt(getcontext())
 
     def normalized(self):
         try:
@@ -54,7 +54,20 @@ class Vector(object):
     def angle(self, vector):
         numerator = self.dot(vector)
         denominator = self.magnitude() * vector.magnitude()
-        return math.acos((numerator/denominator))
+        quotient = (numerator / denominator)
+        return math.acos(quotient)
 
     def angle_degrees(self, vector):
         return math.degrees(self.angle(vector))
+
+    def orthogonal(self, vector, tolerance=1e-10):
+        return abs(self.dot(vector)) < tolerance
+
+    def parallel(self, vector):
+        return (self.is_zero()
+                or vector.is_zero()
+                or self.angle(vector) == 0
+                or self.angle(vector) == math.pi)
+
+    def is_zero(self, tolerance=1e-10):
+        return self.magnitude() < tolerance

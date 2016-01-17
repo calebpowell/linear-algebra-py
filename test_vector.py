@@ -1,5 +1,6 @@
 from unittest import TestCase
 from vector import Vector
+from decimal import Decimal as dec
 
 __author__ = 'caleb'
 
@@ -25,18 +26,19 @@ class TestVector(TestCase):
                                  '-2.35638000000000008138822948922']), v.times_scalar(7.41))
 
     def test_magnitude(self):
-        self.assertEquals(Vector([-0.221, 7.437]).magnitude(), 7.440282924728065)
-        self.assertEquals(Vector([8.813, -1.331, -6.247]).magnitude(), 10.884187567292289)
+        self.assertEquals(Vector([-0.221, 7.437]).magnitude(), dec('7.44028292472806467554916796252'))
+        self.assertEquals(Vector([8.813, -1.331, -6.247]).magnitude(), dec('10.8841875672922877669084935690'))
 
     def test_normalization(self):
         normalized = Vector([5.581, -2.136]).normalized()
-        self.assertEquals(normalized, Vector(['0.933935214086640295130539147343', '-0.357442325262329983594964055642']),
+        self.assertEquals(normalized, Vector(['0.933935214086640320939539156655', '-0.357442325262329993472768036987']),
                           normalized)
         self.assertEquals(round(normalized.magnitude(), 1), 1)
 
         normalized = Vector([1.996, 3.108, -4.554]).normalized()
-        self.assertEquals(normalized, Vector(['0.340401295943301353537171045562', '0.530043701298487295255023200306',
-                                              '-0.776647044952802835008995686630']), normalized)
+        self.assertEquals(normalized,
+                          Vector(['0.340401295943301353446730853387', '0.530043701298487295114197490245',
+                                              '-0.776647044952802834802650679030']), normalized)
         self.assertEquals(round(normalized.magnitude(), 1), 1)
 
     def test_normalization_with_0_vector(self):
@@ -73,3 +75,15 @@ class TestVector(TestCase):
 
         self.assertEqual(round(v1.angle_degrees(v2), 3), 60.276)
         self.assertEqual(round(v2.angle_degrees(v1), 3), 60.276)
+
+    def test_parallel(self):
+        self.assertTrue(Vector(['-7.579', '-7.88']).parallel(Vector(['22.737', '23.64'])))
+        self.assertFalse(Vector(['-2.029', '9.97', '4.172']).parallel(Vector(['-9.231', '-6.639', '-7.245'])))
+        self.assertFalse(Vector([-2.328, -7.284, -1.124]).parallel(Vector([-1.821, 1.072, -2.94])))
+        self.assertTrue(Vector([2.118,4.827]).parallel(Vector([0,0])))
+
+    def test_orthogonal(self):
+        self.assertFalse(Vector([-7.579, -7.88]).orthogonal(Vector([22.737, 23.64])))
+        self.assertFalse(Vector([-2.029, 9.97, 4.172]).orthogonal(Vector([-9.231, -6.639, -7.245])))
+        self.assertFalse(Vector(['-2.328', '-7.284', '-1.124']).orthogonal(Vector(['-1.821', '1.072', '-2.94'])))
+        self.assertTrue(Vector([2.118,4.827]).orthogonal(Vector([0,0])))
