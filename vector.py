@@ -71,3 +71,10 @@ class Vector(object):
 
     def is_zero(self, tolerance=1e-10):
         return self.magnitude() < tolerance
+
+    def projection_of(self, v):
+        b_normalized = self.normalized()
+        return b_normalized.times_scalar(v.dot(b_normalized))
+
+    def orthog_comp(self, vector):
+        return self.projection_of(vector).times_scalar(-1).plus(vector)

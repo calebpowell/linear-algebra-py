@@ -87,3 +87,28 @@ class TestVector(TestCase):
         self.assertFalse(Vector([-2.029, 9.97, 4.172]).orthogonal(Vector([-9.231, -6.639, -7.245])))
         self.assertFalse(Vector(['-2.328', '-7.284', '-1.124']).orthogonal(Vector(['-1.821', '1.072', '-2.94'])))
         self.assertTrue(Vector([2.118,4.827]).orthogonal(Vector([0,0])))
+
+    def test_projection(self):
+        b = Vector([0.825, 2.036])
+        v = Vector([3.039, 1.879])
+        self.assertEquals([round(x, 3) for x in b.projection_of(v).coordinates],
+                         [1.083, 2.672])
+
+        b = Vector([6.404, -9.144, 2.759, 8.718])
+        v = Vector([3.009, -6.172, 3.692, -2.51])
+        self.assertEquals([round(x, 3) for x in b.projection_of(v).coordinates],
+                         [1.969, -2.811, 0.848, 2.68])
+
+    def test_orthogonal_component(self):
+        b = Vector([-2.155, -9.353, -9.473])
+        v = Vector([-9.88, -3.264, -8.159])
+        v_comp = b.orthog_comp(v)
+        self.assertEquals([round(x, 3) for x in b.orthog_comp(v).coordinates],
+                         [-8.35, 3.376, -1.434])
+        self.assertEquals(b.angle_degrees(v_comp), 90)
+
+        b = Vector([6.404, -9.144, 2.759, 8.718])
+        v = Vector([3.009, -6.172, 3.692, -2.51])
+        self.assertEquals([round(x, 3) for x in b.orthog_comp(v).coordinates],
+                         [1.04, -3.361, 2.844, -5.19])
+        self.assertEquals(b.angle_degrees(b.orthog_comp(v)), 90)
