@@ -1,6 +1,8 @@
 import operator
 import math
 from decimal import Decimal, getcontext
+from collections import deque
+
 __author__ = 'caleb'
 
 getcontext().prec = 30
@@ -50,6 +52,19 @@ class Vector(object):
     def dot(self, vector):
         new_coordinates = [x*y for x,y in zip(self.coordinates, vector.coordinates)]
         return sum(new_coordinates)
+
+    def cross(self, vector):
+        if len(vector.coordinates) > 3:
+            raise Exception('Cannot perform cross product on vectors with > 3 dimensions')
+
+        v = self.coordinates
+        w = vector.coordinates
+
+        x = (v[1] * w[2]) - (v[2] * w[1])
+        y = (v[2] * w[0]) - (v[0] * w[2])
+        z = (v[0] * w[1]) - (v[1] * w[0])
+
+        return Vector([x,y,z])
 
     def angle(self, vector):
         numerator = self.dot(vector)

@@ -64,6 +64,13 @@ class TestVector(TestCase):
         self.assertEqual(round(v.dot(w), 6), 56.397178)
         self.assertEqual(v.dot(w), w.dot(v), "Vector dot multiplication is commutative")
 
+    def test_cross_product(self):
+        v = Vector([5, 3, -2])
+        w = Vector([-1, 0, 3])
+
+        self.assertVecEqual([9, -13, 3], v.cross(w))
+        self.assertEqual(v.cross(w), w.cross(v).times_scalar(-1), "Vector cross multiplication is anti-commutative")
+
     def test_angle_in_radians(self):
         v = Vector([3.183, -7.627])
         w = Vector([-2.668, 5.319])
