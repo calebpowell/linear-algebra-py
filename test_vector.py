@@ -71,6 +71,24 @@ class TestVector(TestCase):
         self.assertVecEqual([9, -13, 3], v.cross(w))
         self.assertEqual(v.cross(w), w.cross(v).times_scalar(-1), "Vector cross multiplication is anti-commutative")
 
+        v = Vector([8.462, 7.893, -8.187])
+        w = Vector([6.984, -5.975, 4.778])
+
+        self.assertVecEqual([-11.205, -97.609, -105.685], v.cross(w), 3)
+        self.assertEqual(v.cross(w), w.cross(v).times_scalar(-1), "Vector cross multiplication is anti-commutative")
+
+    def test_area_of_parallelogram_spanned(self):
+        v = Vector([-8.987, -9.838, 5.031])
+        w = Vector([-4.268, -1.861, -8.866])
+
+        self.assertEqual(v.area_of_parallelogram_spanned(w), dec('142.122221401846328749454663405'))
+
+    def test_area_of_parallelogram_spanned(self):
+        v = Vector([1.5, 9.547, 3.691])
+        w = Vector([-6.007, 0.124, 5.772])
+
+        self.assertEqual(v.area_of_triangle_spanned(w), dec('42.5649373994189335162330582140'))
+
     def test_angle_in_radians(self):
         v = Vector([3.183, -7.627])
         w = Vector([-2.668, 5.319])

@@ -64,11 +64,17 @@ class Vector(object):
         y = (v[2] * w[0]) - (v[0] * w[2])
         z = (v[0] * w[1]) - (v[1] * w[0])
 
-        return Vector([x,y,z])
+        return Vector([x, y, z])
 
-    def angle(self, vector):
-        numerator = self.dot(vector)
-        denominator = self.magnitude() * vector.magnitude()
+    def area_of_parallelogram_spanned(self, w):
+        return self.cross(w).magnitude();
+
+    def area_of_triangle_spanned(self, w):
+        return self.area_of_parallelogram_spanned(w)/Decimal('2.0');
+
+    def angle(self, w):
+        numerator = self.dot(w)
+        denominator = self.magnitude() * w.magnitude()
         quotient = (numerator / denominator)
         return math.acos(quotient)
 
