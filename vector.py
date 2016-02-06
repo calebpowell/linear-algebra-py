@@ -1,7 +1,8 @@
+# coding=utf-8
 import operator
 import math
 from decimal import Decimal, getcontext
-from collections import deque
+
 
 __author__ = 'caleb'
 
@@ -28,28 +29,55 @@ class Vector(object):
         return self.coordinates == v.coordinates
 
     def plus(self, vector):
+        """
+        v+w = [v1+w1, v2+w2, … , vn+wn]
+        :param vector:
+        :return:
+        """
         new_coordinates = [x+y for x,y in zip(self.coordinates, vector.coordinates)]
         return Vector(new_coordinates)
 
     def minus(self, vector):
+        """
+        v-w = [v1-w1, v2-w2, … , vn-wn]
+        :param vector:
+        :return:
+        """
         new_coordinates = [x-y for x,y in zip(self.coordinates, vector.coordinates)]
         return Vector(new_coordinates)
 
-    def times_scalar(self, c):
-        new_coordinates = [Decimal(c) * x for x in self.coordinates]
+    def times_scalar(self, scalar):
+        """
+        s*v = [s*v1, s*v2, … , s*vn]
+        :param scalar:
+        :return:
+        """
+        new_coordinates = [Decimal(scalar) * x for x in self.coordinates]
         return Vector(new_coordinates)
 
     def magnitude(self):
+        """
+        :return ||v||:
+        """
         coordinates_squared = [x**Decimal(2) for x in self.coordinates]
         return sum(coordinates_squared).sqrt(getcontext())
 
     def normalized(self):
+        """
+        :return: 1v/||v|| :raise Exception:
+        """
         try:
             return self.times_scalar(Decimal('1.0')/Decimal(self.magnitude()))
         except ZeroDivisionError:
             raise Exception('Cannot normalize the 0 vector')
 
     def dot(self, vector):
+        """
+        v•w = v1w1 + v2w2 + … + vnwn
+
+        :param vector:
+        :return:
+        """
         new_coordinates = [x*y for x,y in zip(self.coordinates, vector.coordinates)]
         return sum(new_coordinates)
 
@@ -84,11 +112,15 @@ class Vector(object):
     def orthogonal(self, vector, tolerance=1e-10):
         return abs(self.dot(vector)) < tolerance
 
-    def parallel(self, vector):
+    def parallel(self, w):
+        """
+
+        :rtype : True if self is parallel to w
+        """
         return (self.is_zero()
-                or vector.is_zero()
-                or self.angle(vector) == 0
-                or self.angle(vector) == math.pi)
+                or w.is_zero()
+                or self.angle(w) == 0
+                or self.angle(w) == math.pi)
 
     def is_zero(self, tolerance=1e-10):
         return self.magnitude() < tolerance
@@ -98,5 +130,10 @@ class Vector(object):
         return basis_unit.times_scalar(self.dot(basis_unit))
 
     def component_orthogonal_to(self, basis):
+        """
+        v
+        :param basis:
+        :return:
+        """
         return self.minus(self.component_parallel_to(basis))
 
