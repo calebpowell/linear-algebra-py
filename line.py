@@ -29,8 +29,8 @@ class Line(object):
             c = self.constant_term
             basepoint_coords = ['0'] * self.dimension
 
-            initial_index = Line.first_nonzero_index(n)
-            initial_coefficient = n[initial_index]
+            initial_index = Line.first_nonzero_index(n.coordinates)
+            initial_coefficient = n.coordinates[initial_index]
 
             basepoint_coords[initial_index] = c / initial_coefficient
             self.basepoint = Vector(basepoint_coords)
@@ -92,6 +92,44 @@ class Line(object):
             if not MyDecimal(item).is_near_zero():
                 return k
         raise Exception(Line.NO_NONZERO_ELTS_FOUND_MSG)
+
+    def is_parallel_to(self, line):
+        return self.normal_vector.parallel(line.normal_vector)
+
+    def __eq__(self, line):
+        if self.is_parallel_to(line):
+            b1 = self.basepoint
+            b2 = line.basepoint
+            b_diff = b1.minus(b2)
+
+            n = self.normal_vector
+            return b_diff.orthogonal(n)
+        elif self.normal_vector.is_zero():
+            if not line.normal_vector.is_zero():
+                return False
+            else:
+                diff = self.constant_term - line.constant_term
+                return MyDecimal(diff).is_near_zero()
+        elif line.normal_vector.is_zero():
+            return False
+        else:
+            return False
+
+    def intersection(self, line):
+        if self.is_parallel_to(line):
+            return None
+        elif self.__eq__(line):
+            return self
+        else:
+            a, b = self.normal_vector.coordinates
+            c, d = line.normal_vector.coordinates
+            k1 = self.constant_term
+            k2 = line.constant_term
+
+            x_numerator = ((d * k1) - (b * k2))
+            y_numerator = ((-c * k1) + (a * k2))
+            one_over_denom = Decimal(1)/((a * d) - (b * c))
+            return Vector([x_numerator, y_numerator]).times_scalar(one_over_denom)
 
 
 class MyDecimal(Decimal):
