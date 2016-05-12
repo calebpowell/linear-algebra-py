@@ -28,6 +28,12 @@ class Vector(object):
     def __eq__(self, v):
         return self.coordinates == v.coordinates
 
+    def __iter__(self):
+        return iter(self.coordinates)
+
+    def __getitem__(self, item):
+        return self.coordinates[item]
+
     def plus(self, vector):
         """
         v+w = [v1+w1, v2+w2, … , vn+wn]
@@ -136,4 +142,5 @@ class Vector(object):
         :return:
         """
         return self.minus(self.component_parallel_to(basis))
+
 
