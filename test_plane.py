@@ -19,7 +19,6 @@ class TestPlane(TestCase):
         p2 = Plane(Vector([7.715, 8.306, 5.342]), 3.76)
         self.assertFalse(p1.is_parallel_to(p2))
 
-
         p1 = Plane(Vector([-7.926, 8.625, -7.212]), -7.952)
         p2 = Plane(Vector([-2.642, 2.875, -2.404]), -2.443)
         self.assertNotEqual(p1, p2)
