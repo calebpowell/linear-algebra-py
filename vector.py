@@ -26,7 +26,6 @@ class Vector(object):
         return 'Vector: {}'.format(self.coordinates)
 
     def __eq__(self, v):
-        # if(type(v) == 'Vector')
         return self.coordinates == v.coordinates
 
     def plus(self, vector):

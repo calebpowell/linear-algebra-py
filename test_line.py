@@ -50,8 +50,9 @@ class TestLine(TestCase):
         l1 = Line(Vector([4.046, 2.836]), 1.21)
         l2 = Line(Vector([10.115, 7.09]), 3.025)
 
-        self.assertTrue(None == l1.intersection(l2))
         self.assertTrue(l1.__eq__(l2))
+        self.assertEquals(None, l1.intersection(l2))
+
 
         l1 = Line(Vector([7.204, 3.182]), 8.68)
         l2 = Line(Vector([8.172, 4.114]), 9.883)

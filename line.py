@@ -97,14 +97,8 @@ class Line(object):
         return self.normal_vector.parallel(line.normal_vector)
 
     def __eq__(self, line):
-        if self.is_parallel_to(line):
-            b1 = self.basepoint
-            b2 = line.basepoint
-            b_diff = b1.minus(b2)
 
-            n = self.normal_vector
-            return b_diff.orthogonal(n)
-        elif self.normal_vector.is_zero():
+        if self.normal_vector.is_zero():
             if not line.normal_vector.is_zero():
                 return False
             else:
@@ -112,13 +106,21 @@ class Line(object):
                 return MyDecimal(diff).is_near_zero()
         elif line.normal_vector.is_zero():
             return False
-        else:
+
+        if not self.is_parallel_to(line):
             return False
+
+        b1 = self.basepoint
+        b2 = line.basepoint
+        b_diff = b1.minus(b2)
+
+        n = self.normal_vector
+        return b_diff.orthogonal(n)
 
     def intersection(self, line):
         if self.is_parallel_to(line):
             return None
-        elif self.__eq__(line):
+        elif self == line:
             return self
         else:
             a, b = self.normal_vector.coordinates
