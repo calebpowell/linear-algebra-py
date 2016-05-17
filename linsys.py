@@ -27,18 +27,18 @@ class LinearSystem(object):
             raise Exception(self.ALL_PLANES_MUST_BE_IN_SAME_DIM_MSG)
 
     def swap_rows(self, row1, row2):
-        self.planes[row1], self.planes[row2] = self.planes[row2], self.planes[row1]
+        self[row1], self[row2] = self[row2], self[row1]
 
     def multiply_coefficient_and_row(self, coefficient, row):
-        p = self.planes[row]
-        self.planes[row] = Plane(p.normal_vector.times_scalar(coefficient), p.constant_term * coefficient)
+        p = self[row]
+        self[row] = Plane(p.normal_vector.times_scalar(coefficient), p.constant_term * coefficient)
 
     def add_multiple_times_row_to_row(self, coefficient, row_to_add, row_to_be_added_to):
         if coefficient != 0:
-            p = self.planes[row_to_add]
+            p = self[row_to_add]
             p = Plane(p.normal_vector.times_scalar(coefficient), (p.constant_term * coefficient))
-            q = self.planes[row_to_be_added_to]
-            self.planes[row_to_be_added_to] = Plane(q.normal_vector.plus(p.normal_vector),
+            q = self[row_to_be_added_to]
+            self[row_to_be_added_to] = Plane(q.normal_vector.plus(p.normal_vector),
                                                     q.constant_term + p.constant_term)
 
     def indices_of_first_nonzero_terms_in_each_row(self):
@@ -57,6 +57,29 @@ class LinearSystem(object):
                     raise e
 
         return indices
+
+    def compute_triangular_form(self):
+        sys = deepcopy(self)
+
+        idx = [(i, p) for i, p in enumerate(sys.indices_of_first_nonzero_terms_in_each_row())]
+        while True:
+            for i, p in enumerate(sys.indices_of_first_nonzero_terms_in_each_row()):
+                if (i < (len(idx) -1)) and (p > idx[i+1][1]):
+                    sys.swap_rows(i, i+1)
+                    break
+            idx = [(i, p) for i, p in enumerate(sys.indices_of_first_nonzero_terms_in_each_row())]
+            if idx == sorted(idx, key=lambda t: t[1]):
+                break
+        #     idx = sys.indices_of_first_nonzero_terms_in_each_row()
+        #     idx = [(q, r) for q, r in enumerate(idx)]
+        #     print 'origin => %s' % idx
+        #     for j, m in enumerate(idx):
+        #         print "j:%s,m:%s" % (j, m)
+        #         if p[0] == m[0]:
+        #             sys.swap_rows(i, j)
+        #             break
+
+        return sys
 
     def __len__(self):
         return len(self.planes)
