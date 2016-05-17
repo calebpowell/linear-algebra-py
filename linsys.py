@@ -61,24 +61,15 @@ class LinearSystem(object):
     def compute_triangular_form(self):
         sys = deepcopy(self)
 
-        idx = [(i, p) for i, p in enumerate(sys.indices_of_first_nonzero_terms_in_each_row())]
         while True:
-            for i, p in enumerate(sys.indices_of_first_nonzero_terms_in_each_row()):
-                if (i < (len(idx) -1)) and (p > idx[i+1][1]):
-                    sys.swap_rows(i, i+1)
-                    break
-            idx = [(i, p) for i, p in enumerate(sys.indices_of_first_nonzero_terms_in_each_row())]
-            if idx == sorted(idx, key=lambda t: t[1]):
+            idx = sys.indices_of_first_nonzero_terms_in_each_row()
+            if idx == sorted(idx):
                 break
-        #     idx = sys.indices_of_first_nonzero_terms_in_each_row()
-        #     idx = [(q, r) for q, r in enumerate(idx)]
-        #     print 'origin => %s' % idx
-        #     for j, m in enumerate(idx):
-        #         print "j:%s,m:%s" % (j, m)
-        #         if p[0] == m[0]:
-        #             sys.swap_rows(i, j)
-        #             break
-
+            else:
+                for i, p in enumerate(idx):
+                    if (i < (len(idx) -1)) and (p > idx[i+1]):
+                        sys.swap_rows(i, i+1)
+                        break
         return sys
 
     def __len__(self):
