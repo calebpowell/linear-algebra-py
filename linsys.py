@@ -61,6 +61,7 @@ class LinearSystem(object):
     def compute_triangular_form(self):
         sys = deepcopy(self)
 
+        #swap rows
         while True:
             idx = sys.indices_of_first_nonzero_terms_in_each_row()
             if idx == sorted(idx):
@@ -70,6 +71,20 @@ class LinearSystem(object):
                     if (i < (len(idx) -1)) and (p > idx[i+1]):
                         sys.swap_rows(i, i+1)
                         break
+
+        #Add multiples of rows to rows underneath
+        print "before multiples => %s" % sys
+        idx = sys.indices_of_first_nonzero_terms_in_each_row()
+        for i, p in enumerate(idx):
+            if (i < (len(idx) -1)) and (p == idx[i+1]):
+                a = sys[i].normal_vector[p]
+                b = sys[i + 1].normal_vector[idx[i+1]]
+                print 'a:%i, b:%i' % (a, b)
+                x = (-1 * b)/a
+                print 'x:%i' % x
+                sys.add_multiple_times_row_to_row(x, i, i+1)
+                break
+
         return sys
 
     def __len__(self):
