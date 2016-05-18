@@ -108,32 +108,31 @@ class TestLinearSystem(TestCase):
         self.assertEqual(s[3], p3)
 
     def test_compute_triangular_form(self):
-        # p1 = Plane(normal_vector=Vector(['0','1','1']), constant_term='1')
-        # p2 = Plane(normal_vector=Vector(['0','0','1']), constant_term='2')
-        # p3 = Plane(normal_vector=Vector(['1','1','1']), constant_term='2')
-        # s = LinearSystem([p1, p2, p3])
-        # t = s.compute_triangular_form()
-        #
-        # self.assertEqual(t[0], p3, str(t[0]))
-        # self.assertEqual(t[1], p1, str(t[1]))
-        # self.assertEqual(t[2], p2, str(t[2]))
-        #
-        #
-        # p1 = Plane(normal_vector=Vector(['1','1','1']), constant_term='1')
-        # p2 = Plane(normal_vector=Vector(['0','1','1']), constant_term='2')
-        # s = LinearSystem([p1,p2])
-        # t = s.compute_triangular_form()
-        #
-        # self.assertEqual(t[0], p1)
-        # self.assertEqual(t[1], p2)
-        #
-        # p1 = Plane(normal_vector=Vector(['1','1','1']), constant_term='1')
-        # p2 = Plane(normal_vector=Vector(['1','1','1']), constant_term='2')
-        # s = LinearSystem([p1,p2])
-        # t = s.compute_triangular_form()
-        #
-        # self.assertEqual(t[0], p1)
-        # self.assertEqual(t[1], Plane(constant_term='1'), str(t[1]))
+        p1 = Plane(normal_vector=Vector(['0','1','1']), constant_term='1')
+        p2 = Plane(normal_vector=Vector(['0','0','1']), constant_term='2')
+        p3 = Plane(normal_vector=Vector(['1','1','1']), constant_term='2')
+        s = LinearSystem([p1, p2, p3])
+        t = s.compute_triangular_form()
+
+        self.assertEqual(t[0], p3, str(t[0]))
+        self.assertEqual(t[1], p1, str(t[1]))
+        self.assertEqual(t[2], p2, str(t[2]))
+
+        p1 = Plane(normal_vector=Vector(['1','1','1']), constant_term='1')
+        p2 = Plane(normal_vector=Vector(['0','1','1']), constant_term='2')
+        s = LinearSystem([p1,p2])
+        t = s.compute_triangular_form()
+
+        self.assertEqual(t[0], p1)
+        self.assertEqual(t[1], p2)
+
+        p1 = Plane(normal_vector=Vector(['1','1','1']), constant_term='1')
+        p2 = Plane(normal_vector=Vector(['1','1','1']), constant_term='2')
+        s = LinearSystem([p1,p2])
+        t = s.compute_triangular_form()
+
+        self.assertEqual(t[0], p1, t)
+        self.assertEqual(t[1], Plane(constant_term='1'), str(t[1]))
 
         p1 = Plane(normal_vector=Vector(['1','1','1']), constant_term='1')
         p2 = Plane(normal_vector=Vector(['0','1','0']), constant_term='2')
@@ -142,24 +141,52 @@ class TestLinearSystem(TestCase):
         s = LinearSystem([p1,p2,p3,p4])
         t = s.compute_triangular_form()
 
-        print t
         self.assertEqual(t[0], p1)
-        self.assertEqual(t[1], p2)
-        self.assertEqual(t[2], Plane(normal_vector=Vector(['0','0','-2']), constant_term='2'))
-        self.assertEqual(t[3], t[3] == Plane())
+        self.assertEqual(t[1], Plane(normal_vector=Vector(['0','-1','-3']), constant_term='1'))
+        self.assertEqual(t[2], Plane(normal_vector=Vector(['0','0','-3']), constant_term='3'))
+        self.assertEqual(t[3], Plane())
 
-# if not (t[0] == p1 and
-#         t[1] == p2 and
-#         t[2] == Plane(normal_vector=Vector(['0','0','-2']), constant_term='2') and
-#         t[3] == Plane()):
-#     print 'test case 3 failed'
-#
-# p1 = Plane(normal_vector=Vector(['0','1','1']), constant_term='1')
-# p2 = Plane(normal_vector=Vector(['1','-1','1']), constant_term='2')
-# p3 = Plane(normal_vector=Vector(['1','2','-5']), constant_term='3')
-# s = LinearSystem([p1,p2,p3])
-# t = s.compute_triangular_form()
+        p1 = Plane(normal_vector=Vector(['0','1','1']), constant_term='1')
+        p2 = Plane(normal_vector=Vector(['1','-1','1']), constant_term='2')
+        p3 = Plane(normal_vector=Vector(['1','2','-5']), constant_term='3')
+        s = LinearSystem([p1,p2,p3])
+        t = s.compute_triangular_form()
+
+        print t
+        self.assertEqual(t[0], Plane(normal_vector=Vector(['1','-1','1']), constant_term='2'))
+        self.assertEqual(t[1], Plane(normal_vector=Vector(['0','1','1']), constant_term='1'))
+        self.assertEqual(t[2], Plane(normal_vector=Vector(['0','0','-9']), constant_term='-1'))
+
 # if not (t[0] == Plane(normal_vector=Vector(['1','-1','1']), constant_term='2') and
 #         t[1] == Plane(normal_vector=Vector(['0','1','1']), constant_term='1') and
 #         t[2] == Plane(normal_vector=Vector(['0','0','-9']), constant_term='-2')):
 #     print 'test case 4 failed'
+
+    def test_triangular(self):
+        p1 = Plane(normal_vector=Vector(['1','1','1']), constant_term='1')
+        p2 = Plane(normal_vector=Vector(['0','1','0']), constant_term='2')
+        p3 = Plane(normal_vector=Vector(['1','1','-1']), constant_term='3')
+        s = LinearSystem([p1,p2,p3])
+
+        self.assertFalse(s.triangular())
+
+        p1 = Plane(normal_vector=Vector(['0','0','0']), constant_term='1')
+        p2 = Plane(normal_vector=Vector(['1','1','1']), constant_term='2')
+        s = LinearSystem([p1,p2])
+
+        self.assertFalse(s.triangular())
+
+        p1 = Plane(normal_vector=Vector(['1','1','1']), constant_term='1')
+        p2 = Plane(normal_vector=Vector(['0','1','1']), constant_term='2')
+        p3 = Plane(normal_vector=Vector(['0','0','1']), constant_term='3')
+        p4 = Plane(normal_vector=Vector(['0','0','0']), constant_term='0')
+        s = LinearSystem([p1,p2,p3,p4])
+
+        self.assertTrue(s.triangular())
+
+        p1 = Plane(normal_vector=Vector(['1','1','1']), constant_term='1')
+        p2 = Plane(normal_vector=Vector(['0','1','1']), constant_term='2')
+        p3 = Plane(normal_vector=Vector(['0','0','-1']), constant_term='3')
+        s = LinearSystem([p1,p2,p3])
+
+        self.assertTrue(s.triangular())
