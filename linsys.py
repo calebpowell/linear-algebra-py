@@ -61,47 +61,49 @@ class LinearSystem(object):
     def nonzero_indices(self):
         return self.indices_of_first_nonzero_terms_in_each_row()
 
-    def triangular(self):
-        idx = self.nonzero_indices()
-        for i, p in enumerate(idx):
-            if i > 0:
-                if p > -1 and idx[i-1] < 0:
-                    return False
-                elif p > -1 and p <= idx[i-1]:
-                    return False
-        return True
+    def contains_nonzero_coefficient_after(self, start, c_index):
+        for i in range(start + 1, len(self)):
+            if self[i].normal_vector[c_index] != 0:
+                return i
+
+        return None
 
     def compute_triangular_form(self):
         sys = deepcopy(self)
 
-        while not sys.triangular():
-            idx = sys.nonzero_indices()
-            for i, p in enumerate(idx):
-                if i > 0:
-                    if p < idx[i-1]:
-                        sys.swap_rows(i, i-1)
-                        break
-                    elif p == idx[i-1]:
-                        a = sys[i - 1].normal_vector[idx[i - 1]]
-                        b = sys[i].normal_vector[idx[i]]
-                        print 'a:%i, b:%i' % (a, b)
-                        x = (-1 * b)/a
-                        print 'x:%i' % x
-                        sys.add_multiple_times_row_to_row(x, i-1, i)
-                        break
+        m = len(sys)
+        n = sys.dimension
+        j = 0
+        for i in range(0, m):
+            while j < n:
+                # consider the coefficient of var j in row i
+                c = sys[i].normal_vector[j]
+                if c == 0:
+                    # determine whether a row under i contains a non-zero coefficient for var j
+                    idx = sys.contains_nonzero_coefficient_after(i, j)
+                    if idx > i:
+                        sys.swap_rows(i, idx)
+                    else:
+                        j += 1
+                        continue
 
-        #Add multiples of rows to rows underneath
-        # print "before multiples => %s" % sys
-        # idx = sys.indices_of_first_nonzero_terms_in_each_row()
-        # for i, p in enumerate(idx):
-        #     if (i < (len(idx) -1)) and (p == idx[i+1]):
-        #         a = sys[i].normal_vector[p]
-        #         b = sys[i + 1].normal_vector[idx[i+1]]
-        #         print 'a:%i, b:%i' % (a, b)
-        #         x = (-1 * b)/a
-        #         print 'x:%i' % x
-        #         sys.add_multiple_times_row_to_row(x, i, i+1)
-        #         break
+                # clear all terms with var j below row i
+                for k in range(i+1, m):
+                    if sys[k].normal_vector[j] != 0:
+                        a = sys[i].normal_vector[j]
+                        d = sys[k].normal_vector[j]
+                        # consider:
+                        # ax + by + cz = 1 (eq#1)
+                        # dx + ey + fz = 2 (eq#2)
+                        # to make x==0 in eq#2, we must make d==0:
+                        # na + d = 0
+                        # na = -d
+                        # n = -d/a
+                        coefficient = (-d)/a
+                        sys.add_multiple_times_row_to_row(coefficient, i, k)
+
+                j += 1
+                break
 
         return sys
 
