@@ -77,8 +77,8 @@ class LinearSystem(object):
         for i in range(0, m):
             while j < n:
                 # consider the coefficient of var j in row i
-                c = sys[i].normal_vector[j]
-                if c == 0:
+                c = MyDecimal(sys[i].normal_vector[j])
+                if c.is_near_zero():
                     # determine whether a row under i contains a non-zero coefficient for var j
                     idx = sys.contains_nonzero_coefficient_after(i, j)
                     if idx > i:
