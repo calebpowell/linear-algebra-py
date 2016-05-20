@@ -117,6 +117,14 @@ class LinearSystem(object):
                 x = sys[i].normal_vector[pivots[i]]
                 sys.multiply_coefficient_and_row(1/x, i)
 
+        for i in range(0, len(sys)):
+            for j in range(i, sys.dimension):
+                c = sys[i].normal_vector[j]
+                if c != 0 and j in pivots and pivots.index(j) > i:
+                    x = sys[pivots.index(j)].normal_vector[j]
+                    sys.add_multiple_times_row_to_row(-c/x, pivots.index(j), i)
+
+
 
         return sys
 
