@@ -2,6 +2,7 @@ from unittest import TestCase
 from plane import Plane
 from vector import Vector
 from linsys import LinearSystem
+from decimal import Decimal
 
 __author__ = 'caleb'
 
@@ -51,7 +52,6 @@ class TestLinearSystem(TestCase):
         self.assertEqual(s[1], Plane(normal_vector=Vector(['10','10','10']), constant_term='10'))
         self.assertEqual(s[2], Plane(normal_vector=Vector(['-1','-1','1']), constant_term='-3'))
         self.assertEqual(s[3], p3)
-
 
     def test_multiply_coefficient_and_rows(self):
 
@@ -156,3 +156,47 @@ class TestLinearSystem(TestCase):
         self.assertEqual(t[0], Plane(normal_vector=Vector(['1','-1','1']), constant_term='2'))
         self.assertEqual(t[1], Plane(normal_vector=Vector(['0','1','1']), constant_term='1'))
         self.assertEqual(t[2], Plane(normal_vector=Vector(['0','0','-9']), constant_term='-2'))
+
+    def test_compute_rref(self):
+
+        p1 = Plane(normal_vector=Vector(['2','1','1']), constant_term='1')
+        p2 = Plane(normal_vector=Vector(['0','3','3']), constant_term='3')
+        p3 = Plane(normal_vector=Vector(['0','0','1']), constant_term='1')
+        r = LinearSystem([p1, p2, p3]).compute_rref()
+
+        self.assertEqual(r[0], Plane(normal_vector=Vector(['1','0.5','0.5']), constant_term='0.5'), str(r[0]))
+        self.assertEqual(r[1], Plane(normal_vector=Vector(['0','1','1']), constant_term='1'), str(r[1]))
+        self.assertEqual(r[2], p3, str(r[2]))
+        # p1 = Plane(normal_vector=Vector(['1','1','1']), constant_term='1')
+        # p2 = Plane(normal_vector=Vector(['0','1','1']), constant_term='2')
+        # r = LinearSystem([p1, p2]).compute_rref()
+        #
+        # self.assertEqual(r[0], Plane(normal_vector=Vector(['1','0','0']), constant_term='-1'), str(r[0]))
+        # self.assertEqual(r[1], p2)
+        #
+        # p1 = Plane(normal_vector=Vector(['1','1','1']), constant_term='1')
+        # p2 = Plane(normal_vector=Vector(['1','1','1']), constant_term='2')
+        # r = LinearSystem([p1, p2]).compute_rref()
+        #
+        # self.assertEqual(r[0], p1)
+        # self.assertEqual(r[1], Plane(constant_term='1'))
+        #
+        # p1 = Plane(normal_vector=Vector(['1','1','1']), constant_term='1')
+        # p2 = Plane(normal_vector=Vector(['0','1','0']), constant_term='2')
+        # p3 = Plane(normal_vector=Vector(['1','1','-1']), constant_term='3')
+        # p4 = Plane(normal_vector=Vector(['1','0','-2']), constant_term='2')
+        # r = LinearSystem([p1, p2, p3, p4]).compute_rref()
+        #
+        # self.assertEqual(r[0], Plane(normal_vector=Vector(['1','0','0']), constant_term='0'))
+        # self.assertEqual(r[1], p2)
+        # self.assertEqual(r[2], Plane(normal_vector=Vector(['0','0','-2']), constant_term='2'))
+        # self.assertEqual(r[3], Plane())
+        #
+        # p1 = Plane(normal_vector=Vector(['0','1','1']), constant_term='1')
+        # p2 = Plane(normal_vector=Vector(['1','-1','1']), constant_term='2')
+        # p3 = Plane(normal_vector=Vector(['1','2','-5']), constant_term='3')
+        # r = LinearSystem([p1, p2, p3]).compute_rref()
+        #
+        # self.assertEqual(r[0], Plane(normal_vector=Vector(['1','0','0']), constant_term=Decimal('23')/Decimal('9')))
+        # self.assertEqual(r[1], Plane(normal_vector=Vector(['0','1','0']), constant_term=Decimal('7')/Decimal('9')))
+        # self.assertEqual(r[2], Plane(normal_vector=Vector(['0','0','1']), constant_term=Decimal('2')/Decimal('9')))

@@ -107,6 +107,19 @@ class LinearSystem(object):
 
         return sys
 
+    def compute_rref(self):
+        sys = self.compute_triangular_form()
+
+        pivots = sys.indices_of_first_nonzero_terms_in_each_row()
+
+        for i in range(0, len(sys)):
+            if pivots[i] > -1 and sys[i].normal_vector[pivots[i]] != 1:
+                x = sys[i].normal_vector[pivots[i]]
+                sys.multiply_coefficient_and_row(1/x, i)
+
+
+        return sys
+
     def __len__(self):
         return len(self.planes)
 
